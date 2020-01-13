@@ -26,10 +26,11 @@ def sta_lta(data, dt, min_period):
     :param min_period: The minimum period of the data.
     """
     Cs = 10 ** (-dt / min_period)
-    Cl = 10 ** (-dt / (40 * min_period))    #Cl = 10 ** (-dt / (12 * min_period)),xichengpeng修改
-    TOL = 1e-2        #TOL = 1e-9,xichengpeng修改
-    noise = data.max() / 15       #noise = data.max() / 1E5,xichengpeng修改
-#    print('noise',noise)
+    Cl = 10 ** (-dt / (43 * min_period))
+    TOL = 1e-2
+
+    noise = data.max() / 25
+
     # 1000 samples should be more then enough to "warm up" the STA/LTA.
     extended_syn = np.zeros(len(data) + 1000, dtype=np.float64)
     # copy the original synthetic into the extended array, right justified
@@ -50,7 +51,7 @@ def sta_lta(data, dt, min_period):
     a = [1.0, -Cl]
     b = [1.0]
     lta = lfilter(b, a, extended_syn)
-#    print('lta',lta)
+
     # STA is now STA_LTA
     sta /= lta
 
